@@ -49,12 +49,34 @@
         }
 
         /* REVEAL ON SCROLL */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .reveal-left.active { opacity: 1; transform: translateX(0); }
-        .reveal-right { opacity: 0; transform: translateX(40px); transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        
+        .reveal-stagger { opacity: 0; transform: translateY(15px); transition: all 0.8s ease-out; }
+        .active .reveal-stagger { opacity: 1; transform: translateY(0); }
+
+        /* FOTO TRANSITION */
+        .photo-reveal { 
+            opacity: 0; 
+            transform: scale(0.9); 
+            transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        }
+        .active .photo-reveal { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+
+        /* ANIMASI PER HURUF */
+        .letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .active .letter {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* EVENT CARDS */
         .event-card {
@@ -63,23 +85,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.5s ease;
         }
-        .event-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.07);
-            border-color: var(--primary);
-        }
 
         .img-zoom-container {
             overflow: hidden;
             border-radius: 9999px;
             position: relative;
-        }
-        .img-zoom {
-            transition: transform 4s ease-out;
-            transform: scale(1.15);
-        }
-        .active .img-zoom {
-            transform: scale(1);
         }
 
         .bottom-nav {
@@ -122,11 +132,9 @@
             100% { transform: translateY(0px); }
         }
 
-        /* Penyesuaian khusus mobile agar tidak terpotong */
         @media (max-width: 640px) {
-            .mobile-title { font-size: 4rem !important; }
-            .mobile-name { font-size: 1.75rem !important; line-height: 1.2; }
-            .mobile-subtitle { font-size: 0.9rem !important; }
+            .mobile-name-size { font-size: 1.5rem !important; } /* Perkecil nama & gelar */
+            .mobile-cover-name { font-size: 3.5rem !important; }
         }
     </style>
 </head>
@@ -144,10 +152,12 @@
                      <svg class="w-10 h-10 mx-auto text-primary-light opacity-80" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
                 </div>
                 <span class="section-title text-white/80">The Wedding Invitation</span>
-                <!-- Menggunakan flex-wrap dan ukuran dinamis agar tidak terpotong -->
-                <h1 class="font-script text-6xl sm:text-7xl md:text-9xl mb-8 leading-tight drop-shadow-lg flex flex-wrap justify-center gap-x-4">
-                    <span>Yogi</span> <span class="text-primary-light">&</span> <span>Clara</span>
+                
+                <!-- Nama tetap 1 baris di cover -->
+                <h1 class="font-script text-6xl sm:text-7xl md:text-8xl mb-8 leading-tight drop-shadow-lg whitespace-nowrap mobile-cover-name">
+                    <span class="animate-letters">Yogi & Clara</span>
                 </h1>
+
                 <div class="mb-10">
                     <p class="text-white/70 text-[9px] uppercase tracking-[0.3em] mb-4">Eksklusif Untuk:</p>
                     <h3 id="guestNameDisplay" class="font-serif text-xl italic font-light border-b border-white/30 pb-2 px-6 inline-block drop-shadow">Tamu Undangan</h3>
@@ -169,8 +179,8 @@
         <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center p-6 bg-fixed bg-cover bg-center relative overflow-hidden" style="background-image: linear-gradient(rgba(244, 241, 238, 0.9), rgba(244, 241, 238, 0.9)), url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=2000');">
             <div class="reveal w-full px-4 max-w-screen-sm">
                 <span class="section-title">Save the Date</span>
-                <h2 class="font-script text-6xl sm:text-8xl text-stone-700 mb-8 flex flex-wrap justify-center gap-x-4">
-                    <span>Yogi</span> <span class="text-primary">&</span> <span>Clara</span>
+                <h2 class="font-script text-6xl sm:text-8xl text-stone-700 mb-8 whitespace-nowrap">
+                    <span class="animate-letters">Yogi & Clara</span>
                 </h2>
                 <div class="flex items-center justify-center gap-4 mb-8">
                     <div class="h-[1px] w-8 bg-primary/40"></div>
@@ -190,31 +200,44 @@
 
             <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
                 <!-- Mempelai Pria -->
-                <div class="reveal-left">
-                    <div class="img-zoom-container w-56 h-56 sm:w-64 sm:h-64 mx-auto mb-8 shadow-xl ring-4 ring-white">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=600" class="img-zoom w-full h-full object-cover">
+                <div class="reveal">
+                    <div class="img-zoom-container photo-reveal w-56 h-56 sm:w-64 sm:h-64 mx-auto mb-8 shadow-xl ring-4 ring-white">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
                     </div>
-                    <!-- Menggunakan text-2xl di mobile agar tidak terpotong -->
-                    <h3 class="font-script text-2xl sm:text-4xl text-stone-700 mb-4 px-2">Yogi Trisno Wandani, S.Tr.Kom.</h3>
-                    <p class="font-sans text-[9px] font-bold tracking-[0.3em] text-primary mb-4 uppercase">Putra dari</p>
+                    
+                    <!-- Nama dan gelar 1 baris, ukuran diperkecil -->
+                    <h3 class="font-script text-2xl sm:text-3xl text-stone-700 mb-4 px-2 mobile-name-size whitespace-nowrap">
+                        <span class="animate-letters">Yogi Trisno Wandani, S.Tr.Kom.</span>
+                    </h3>
+                    
+                    <div class="reveal-stagger" style="transition-delay: 0.5s;">
+                        <p class="font-sans text-[9px] font-bold tracking-[0.3em] text-primary mb-4 uppercase">Putra dari</p>
+                    </div>
                     <div class="space-y-1 font-serif text-stone-600 italic text-sm sm:text-base">
-                        <p class="font-semibold text-stone-800 not-italic">Bapak Slamet Haryoko</p>
-                        <p class="text-stone-400 text-xs">&</p>
-                        <p class="font-semibold text-stone-800 not-italic">Ibu Marwiyah</p>
+                        <p class="font-semibold text-stone-800 not-italic reveal-stagger" style="transition-delay: 0.7s;">Bapak Slamet Haryoko</p>
+                        <p class="text-stone-400 text-xs reveal-stagger" style="transition-delay: 0.8s;">&</p>
+                        <p class="font-semibold text-stone-800 not-italic reveal-stagger" style="transition-delay: 0.9s;">Ibu Marwiyah</p>
                     </div>
                 </div>
 
                 <!-- Mempelai Wanita -->
-                <div class="reveal-right">
-                    <div class="img-zoom-container w-56 h-56 sm:w-64 sm:h-64 mx-auto mb-8 shadow-xl ring-4 ring-white">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" class="img-zoom w-full h-full object-cover">
+                <div class="reveal">
+                    <div class="img-zoom-container photo-reveal w-56 h-56 sm:w-64 sm:h-64 mx-auto mb-8 shadow-xl ring-4 ring-white">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="font-script text-2xl sm:text-4xl text-stone-700 mb-4 px-2">Clara Ady Wardani, S.Pd.</h3>
-                    <p class="font-sans text-[9px] font-bold tracking-[0.3em] text-primary mb-4 uppercase">Putri dari</p>
+
+                    <!-- Nama dan gelar 1 baris, ukuran diperkecil -->
+                    <h3 class="font-script text-2xl sm:text-3xl text-stone-700 mb-4 px-2 mobile-name-size whitespace-nowrap">
+                        <span class="animate-letters">Clara Ady Wardani, S.Pd.</span>
+                    </h3>
+
+                    <div class="reveal-stagger" style="transition-delay: 0.5s;">
+                        <p class="font-sans text-[9px] font-bold tracking-[0.3em] text-primary mb-4 uppercase">Putri dari</p>
+                    </div>
                     <div class="space-y-1 font-serif text-stone-600 italic text-sm sm:text-base">
-                        <p class="font-semibold text-stone-800 not-italic">Bapak Juliadi</p>
-                        <p class="text-stone-400 text-xs">&</p>
-                        <p class="font-semibold text-stone-800 not-italic">Ibu Niketut Ari Aktorina</p>
+                        <p class="font-semibold text-stone-800 not-italic reveal-stagger" style="transition-delay: 0.7s;">Bapak Juliadi</p>
+                        <p class="text-stone-400 text-xs reveal-stagger" style="transition-delay: 0.8s;">&</p>
+                        <p class="font-semibold text-stone-800 not-italic reveal-stagger" style="transition-delay: 0.9s;">Ibu Niketut Ari Aktorina</p>
                     </div>
                 </div>
             </div>
@@ -232,28 +255,30 @@
 
             <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto relative z-10">
                 <!-- AKAD -->
-                <div class="event-card p-8 sm:p-12 rounded-[2rem] reveal-left">
-                    <h3 class="font-serif text-2xl mb-6 tracking-wider">Akad Nikah</h3>
+                <div class="event-card p-8 sm:p-12 rounded-[2rem] reveal">
+                    <h3 class="font-serif text-2xl mb-6 tracking-wider reveal-stagger" style="transition-delay: 0.2s;">Akad Nikah</h3>
                     <div class="space-y-4">
-                        <div class="py-3 border-y border-white/10">
+                        <div class="py-3 border-y border-white/10 reveal-stagger" style="transition-delay: 0.4s;">
                             <p class="text-primary-light font-bold text-[10px] tracking-widest uppercase mb-1">Senin</p>
                             <p class="text-xl font-serif">03 Agustus 2026</p>
                         </div>
-                        <p class="text-stone-400 text-xs tracking-widest">PUKUL 09.00 - 10.00 WIB</p>
-                        <p class="text-stone-300 text-sm italic mt-4">Kediaman Mempelai Wanita</p>
+                        <p class="text-stone-400 text-xs tracking-widest reveal-stagger" style="transition-delay: 0.6s;">PUKUL 09.00 - 10.00 WIB</p>
+                        <p class="text-stone-300 text-sm italic mt-4 reveal-stagger" style="transition-delay: 0.8s;">Kediaman Mempelai Wanita</p>
                     </div>
                 </div>
 
                 <!-- RESEPSI -->
-                <div class="event-card p-8 sm:p-12 rounded-[2rem] reveal-right border-primary/30">
-                    <h3 class="font-serif text-2xl mb-6 tracking-wider">Resepsi</h3>
+                <div class="event-card p-8 sm:p-12 rounded-[2rem] reveal border-primary/30">
+                    <h3 class="font-serif text-2xl mb-6 tracking-wider reveal-stagger" style="transition-delay: 0.2s;">Resepsi</h3>
                     <div class="space-y-4">
-                        <div class="py-3 border-y border-white/10">
+                        <div class="py-3 border-y border-white/10 reveal-stagger" style="transition-delay: 0.4s;">
                             <p class="text-primary-light font-bold text-[10px] tracking-widest uppercase mb-1">Minggu</p>
                             <p class="text-xl font-serif">09 Agustus 2026</p>
                         </div>
-                        <p class="text-stone-400 text-xs tracking-widest">PUKUL 11.00 WIB - SELESAI</p>
-                        <a href="https://maps.app.goo.gl/QDsfU1aWKTgr2uWj9" target="_blank" class="mt-6 px-6 py-3 bg-primary/20 border border-primary/40 rounded-full text-[9px] uppercase tracking-widest hover:bg-primary transition-all duration-300 inline-block">Buka Google Maps</a>
+                        <p class="text-stone-400 text-xs tracking-widest reveal-stagger" style="transition-delay: 0.6s;">PUKUL 11.00 WIB - SELESAI</p>
+                        <div class="reveal-stagger" style="transition-delay: 0.8s;">
+                            <a href="https://maps.app.goo.gl/QDsfU1aWKTgr2uWj9" target="_blank" class="mt-6 px-6 py-3 bg-primary/20 border border-primary/40 rounded-full text-[9px] uppercase tracking-widest hover:bg-primary transition-all duration-300 inline-block">Buka Google Maps</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -262,8 +287,8 @@
         <!-- FOOTER -->
         <footer class="py-20 px-6 text-center bg-stone-100">
              <div class="reveal">
-                <h4 class="font-script text-4xl text-stone-500 mb-4">Matur Nuwun</h4>
-                <p class="font-serif text-xs sm:text-sm text-stone-400 italic">Merupakan kehormatan bagi kami jika Bapak/Ibu berkenan hadir.</p>
+                <h4 class="font-script text-4xl text-stone-500 mb-4 animate-letters">Matur Nuwun</h4>
+                <p class="font-serif text-xs sm:text-sm text-stone-400 italic reveal-stagger">Merupakan kehormatan bagi kami jika Bapak/Ibu berkenan hadir.</p>
              </div>
         </footer>
 
@@ -286,10 +311,27 @@
             document.getElementById('guestNameDisplay').innerText = guestName;
         }
 
+        function setupLetterAnimation() {
+            document.querySelectorAll('.animate-letters').forEach(container => {
+                const text = container.textContent;
+                container.textContent = '';
+                [...text].forEach((letter, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = letter === ' ' ? '\u00A0' : letter;
+                    span.className = 'letter';
+                    span.style.transitionDelay = `${index * 0.04}s`;
+                    container.appendChild(span);
+                });
+            });
+        }
+
         function openInvitation() {
             document.getElementById('mainContent').classList.remove('hidden');
             document.getElementById('cover').classList.add('open');
             document.body.classList.remove('overflow-hidden');
+            
+            setupLetterAnimation();
+
             setTimeout(() => document.getElementById('mainNav').classList.add('visible'), 1200);
             
             if (!isPlaying) {
@@ -317,8 +359,9 @@
                         entry.target.classList.add('active');
                     }
                 });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+            }, { threshold: 0.15 });
+            
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
     </script>
 </body>
